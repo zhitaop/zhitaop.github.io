@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Internet technologies</title>
+        
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: #007FFF;
+        --border-width:  5px ;
+    }
+
+   .myname {
+    font-size: 20px;
+    }
+    
+    #topBtn {
+        display: none;  
+        position: fixed;  
+        bottom: 60px;  
+        right: 20px;  
+        z-index: 99;  
+        border: none;  
+        outline: none;  
+        background-color: transparent;  
+        color:#777;   
+    }
+    #botBtn {
+       
+        position: fixed;  
+        bottom: 20px;  
+        right: 20px;  
+        z-index: 99;  
+        border: none;  
+        outline: none;  
+        background-color: transparent;  
+        color:#777;  
+    }
+
+    #topBtn:hover {
+        color: #007FFF;  
+    }
+    #botBtn:hover {
+        color: #007FFF;  
+    }
+
+</style>
+
+
+<link rel="stylesheet" href="http://example.com/css/main.css">
+
+
+
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+
+
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+ 
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/haskell.min.js"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/scala.min.js"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/swift.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.46" />
+        
+
+        
+    </head>
+
+    
+    
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+    
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Internet technologies</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                            
+                            
+                            <li><a href="/"   class="myname">Zhitao</a></li>                                
+                            
+                            <li><a href="/post/"  >Posts</a></li>                                
+                            
+                            <li><a href="/project/"  >Projects</a></li>                                
+                            
+                            <li><a href="/about/"  >About</a></li>                                
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:pzt2154@gmail.com"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/pzt2154"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://twitter.com/username/"><i class="fa fa-facebook"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://www.linkedin.com/in/zhitao-pan-97a043145/"><i class="fa fa-linkedin"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/network/">Internet technologies</a></h4>
+    <h5>September 28, 2017</h5>
+    
+
+</div>
+
+
+    <br> <div class="text-justify">
+
+<h3 id="physical-layer">- Physical Layer</h3>
+
+<h3 id="data-link-layer">- Data Link Layer</h3>
+
+<h3 id="mac-sub-layer">- MAC Sub Layer</h3>
+
+<h3 id="network-layer">- Network Layer</h3>
+
+<h3 id="transport-layer">- Transport Layer</h3>
+
+<h3 id="application-layer">- Application Layer</h3>
+
+<h3 id="http">- Http</h3>
+
+<h3 id="security">- Security</h3>
+
+<h3 id="multimedia">- Multimedia</h3>
+</div>
+
+    <button onclick="topFunction()" id="topBtn" title="Go to top"><i class="fa fa-chevron-circle-up" style="font-size: 30px;"></i></button>
+    <button onclick="botFunction()" id="botBtn" title="Go to top"><i class="fa fa-chevron-circle-down" style="font-size: 30px;"></i></button>
+
+    
+    
+
+    
+
+    
+
+        <h4 class="page-header">Comments</h4>
+
+        <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "username" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a></p>
+
+        </footer>
+       
+    </body>
+
+    <script>
+            window.onscroll = function() {scrollFunction()};
+        
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                document.getElementById("topBtn").style.display = "block";
+            } else {
+                document.getElementById("topBtn").style.display = "none";
+            }
+            if (document.body.scrollTop+700 > $(document).height() || document.documentElement.scrollTop+700 > $(document).height()) {
+                document.getElementById("botBtn").style.display = "none";
+            } else {
+                document.getElementById("botBtn").style.display = "block";
+            }
+        }
+        
+        
+        function topFunction() {
+            document.body.scrollTop = 0; 
+            document.documentElement.scrollTop = 0; 
+        }
+        function botFunction() {
+            document.body.scrollTop = $(document).height(); 
+            document.documentElement.scrollTop = $(document).height();
+        }
+    </script>
+</html>
+
