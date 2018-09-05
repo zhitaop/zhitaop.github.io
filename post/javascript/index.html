@@ -11,7 +11,7 @@
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
         <meta name="msapplication-TileColor" content="#da532c">
         <meta name="theme-color" content="#ffffff">
-        <title>Algorithms</title>
+        <title>The asynchronous nature of Javascript</title>
         
         <style>
 
@@ -121,7 +121,7 @@
 
                 <div class="navbar-header">
 
-                    <a class="navbar-brand visible-xs" href="#">Algorithms</a>
+                    <a class="navbar-brand visible-xs" href="#">The asynchronous nature of Javascript</a>
 
                     <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
                         <span class="icon-bar"></span>
@@ -179,8 +179,8 @@
     
     
 
-    <h4><a href="/post/algorithms/">Algorithms</a></h4>
-    <h5>February 13, 2018</h5>
+    <h4><a href="/post/javascript/">The asynchronous nature of Javascript</a></h4>
+    <h5>June 28, 2018</h5>
     
 
 </div>
@@ -188,197 +188,98 @@
 
     <br> <div class="text-justify">
 
-<p>This is one of a series of articles I plan to write about the subjects I learned in my Software Engineering degree, as a summary and rivision of all the knowledge I gained.</p>
+<p>It all started when I first learned Node.js for back-end development. I started with some simple snippet like the following:</p>
 
-<p>Algorithms and data structures are perhaps the most basic yet most important subjects for all computer science students, that&rsquo;s why I started with this. First of all here&rsquo;s a <a href="https://visualgo.net/en">website</a> that I found quite useful to help learning algorithms and data structures by visualizing.</p>
+<pre><code>var http = require('http');
 
-<p>The outlines and summary of the algorithm and complexity subject:</p>
+//create a server object:
+http.createServer(function (req, res) {
+res.write('Hello World!'); //write a response to the client
+res.end(); //end the response
+}).listen(8080); //the server object listens on port 8080
+</code></pre>
 
-<h3 id="data-structure">- Data structure</h3>
+<p>This looks simple enough albeit the seemingly slightly odd syntax, all it does is creating a HTTP server that listens to a server port and gives a response when it receives a request. However, this odd syntax is what this post is about: asynchronous function. Actually there&rsquo;s more to it, but I write about that in another <a href="../first-class-function">post</a></p>
 
-<ul>
-<li>Array</li>
-<li>Linked list</li>
-<li>Stack (LIFO)</li>
-<li>Queue (FIFO)</li>
-<li>Priority queue</li>
-<li>Tree</li>
-<li>Graph</li>
-</ul>
+<p>I thought of this as a normal syntax of Node.js. It was only after I dived into Node.js deeper for backend development that I realized there are more to it. And that&rsquo;s the topic of this post: the asynchronous nature and first-class function support of Javascript.</p>
 
-<h3 id="growth-rate-and-analysis">- Growth rate and Analysis</h3>
+<h3 id="synchronous-and-asynchronous-functions">Synchronous and Asynchronous functions</h3>
 
-<ul>
-<li><p>Time and space complexty</p>
+<p>What do these two terms mean and what&rsquo;s the difference between them? I found some excellent answers for this on Stack Overflow <a href="https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call">here</a> and <a href="https://stackoverflow.com/questions/23667086/why-is-my-variable-unaltered-after-i-modify-it-inside-of-a-function-asynchron">here</a>, they are both good reads if you are interested in more details. But TLDR, synchronous function is when all of the code executes in sequential order, i.e. after a function is called, any code after the call has to wait for the function to return a result before they can continue to execute. On the other hand, in asynchronous function, code after a function executes immediately after that function is called, even when a result is not returned yet.</p>
 
-<p>t(n) ≈ c·g(n)
-where c is the cost of a basic operation and g is the number of times the operation is performed in terms of input size n.</p></li>
+<p>You might be wondering: What if I want to do something with the result? Where should I put such code? That&rsquo;s when a <em>callback</em> function comes in handy. You would see this term a lot if you are dealing with node.js. A callback function only executes when the function that calls it returns a result. Let&rsquo;s see the below example:</p>
 
-<li><p>Best, worst and average case</p></li>
+<pre><code>var http = require('http');
 
-<li><p>f (n) ≺ g(n) iff lim[n -&gt;infinity] f(n)/g(n) = 0</p></li>
+//create a server object:
+http.createServer(function (req, res) {
+res.write('Hello World!'); //write a response to the client
+res.end(); //end the response
+}).listen(8080); //the server object listens on port 8080
 
-<li><p>1 ≺ log n ≺ n^e ≺ n^c ≺ n^(log n) ≺ c^n ≺ n^n<br />
-where 0 &lt; e &lt; 1 &lt; c</p></li>
+console.log(&quot;This executes immediately after the last function is called.&quot;);
+</code></pre>
 
-<li><p>Big-O, Big-Omega and Big-Theta</p></li>
+<p>The anonymous function in the createServer is a callback function. It only executes when a http request comes in at port 8080. The log function will execute immediately after you initiate this nodejs file.</p>
 
-<li><p>Complexity Analysis</p></li>
-</ul>
+<p>The asynchronous nature is quite useful, especially when it comes to web programming. When a request comes in to the server, for exmaple a request to query some information from a database, the server would pass the query to the database, then it&rsquo;s ready to handle the next request. After the query finishes, the server could then return the result to the client via a callback function.</p>
 
-<h3 id="brute-force">- Brute Force</h3>
+<p>However, the asynchronous nature also means that you have to program in a specific way, and the code can get a bit ugly sometimes. For example the following code which query a database and use the result:</p>
 
-<ul>
-<li>Selection Sort</li>
-<li>String Matching</li>
-<li>Closest pair</li>
-<li>Exhaustive search for combinatorial problem</li>
-<li>Graph traversal</li>
-</ul>
+<pre><code>const session = require('express-session');
+const app = express();
+const mysql = require ('mysql');
+const db = mysql.createConnection({
+    /* some database initialisation */
+})
+db.connect((err)=&gt;{if(err) throw err;});
+app.get('/someroute',(req, res)=&gt;{
+    db.query('somequery', err, result) =&gt; {
+        if(err) throw err;
+        /* some response to the client with the 'result' */
+    }
+})
+</code></pre>
 
-<h3 id="recursion">- Recursion</h3>
+<p>Suppose you have to do more than one query to the database with one request, and return all the results to the client in one response. The simple way will probably look like this:</p>
 
-<ul>
-<li>Example: Factorial Numbers and Fibonacci Numbers</li>
-<li>Example: Tower of Hanoi</li>
-<li>General guideline for recursion: recursively divide the problem into smaller sub-problems until base cases are reached.</li>
-<li>More efficient solution for recursion: dynamic programming</li>
-</ul>
+<pre><code>app.get('/someroute',(req, res)=&gt;{
 
-<h3 id="graph">- Graph</h3>
+    db.query('somequery1', (err, result1) =&gt; {
+        if(err) throw err;
+    })
+    db.query('somequery2', (err, result2) =&gt; {
+        if(err) throw err;
+    })
+    db.query('somequery3', (err, result3) =&gt; {
+        if(err) throw err;
+    })
+    /* response to the client with result 1,2 and 3 */
+})
+</code></pre>
 
-<ul>
-<li>Graph concepts: Undirected - directed, Connnected - Not connected, Unweighted- weighted, Dense - Sparse, Cyclic - Acyclic(a tree), Directed cyclic - Directed acyclic(a dag)</li>
-<li>The degree of node v is the number of edges incident on v.</li>
-<li>Mathematical representation of graph:</li>
-</ul>
+<p>This look clean and neat. But, as you may already see, this is wrong, and in more than one way. Firstly, the response is not in the callback function, meaning that it wouldn&rsquo;t know about the results. Moreover, the 3 queries are done independently, so their results will be returned independently and cannot be sent back to the client in one response. So what&rsquo;s the correct way to do this?</p>
 
-<p><img src="/graphinmath.PNG" alt="graph" width="500" style="display: block; margin-left:auto; margin-right:auto;"/></p>
+<pre><code>app.get('/someroute',(req, res)=&gt;{
 
-<ul>
-<li>Graph representations : adjacency matrix and adjacency list</li>
-</ul>
+    db.query('somequery1', (err, result1) =&gt; {
+        if(err) throw err;
 
-<h3 id="decrease-and-conquer-by-constant">- Decrease and Conquer by constant</h3>
+        db.query('somequery2', (err, result2) =&gt; {
+            if(err) throw err;
 
-<ul>
-<li>The problem is reduced by some constant in each iteration of the algorithm</li>
-<li>To solve a problem of size n, try to express the solution in terms of a solution to the same problem of size n − 1.</li>
-<li>Insertion sort</li>
-<li>The trick of posting a sentinel for insertion sort</li>
-<li>Shellsort</li>
-</ul>
+            db.query('somequery3', (err, result3) =&gt; {
+                if(err) throw err;
+                /* response to the client with result 1,2 and 3*/
+            })
+        })
+    })
+})
+</code></pre>
 
-<h3 id="decrease-and-conquer-by-factor">- Decrease and Conquer by factor</h3>
+<p>In the above code, the three callback functions are nested. The second query function will only execute when the callback function in the first query returns a result, the third query will only execute when the second query returns a result. Finally, when the third query returns a result, all the results can be returned to the client in one response.</p>
 
-<ul>
-<li>Decrease-by-a-constant-factor: Binary search</li>
-<li>Decrease-by-a-variable-factor: Interpolation search</li>
-<li>Lomuto Partitioning</li>
-</ul>
-
-<h3 id="divide-and-conquer">- Divide and Conquer</h3>
-
-<ul>
-<li>
-
-<ol>
-<li>Divide the given problem instance into smaller instances.</li>
-<li>Solve the smaller instances recursively.</li>
-<li>Combine the smaller solutions to solve the original instance.</li>
-</ol></li>
-<li>The Master Theorem</li>
-<li>Mergesort</li>
-<li>Quicksort and corresponding improvements:
-
-<ul>
-<li>Median-of-three</li>
-<li>Early Cut-off</li>
-</ul></li>
-</ul>
-
-<h3 id="binary-tree">Binary Tree</h3>
-
-<ul>
-<li>Binary tree traversal:
-
-<ul>
-<li>Preorder: root -&gt; left subtree -&gt; right subtree</li>
-<li>Inorder: left subtree -&gt; root -&gt; right subtree</li>
-<li>Postorder: left subtree -&gt; right subtree -&gt; root</li>
-<li>Level-order: visits the nodes level by level, starting from the root</li>
-</ul></li>
-<li>Closest Pair problem using divide-and-conquer to reach theta(nlogn) complexity</li>
-</ul>
-
-<h3 id="heap-and-heap-sort">- Heap and Heap sort</h3>
-
-<ul>
-<li>A Heap is a complete binary tree which satisfies the heap condition: <br>Each child has priority no greater than its parent&rsquo;s.(a max-heap)
-*</li>
-<li>Heapsort: Given unsorted array H[1..n]:
-
-<ol>
-<li>Turn H into a heap</li>
-<li>Apply the eject operation n-1 times</li>
-</ol></li>
-</ul>
-
-<h3 id="transform-and-conquer">- Transform and conquer</h3>
-
-<ul>
-<li>Try to make the problem easier through pre-processing, typical sorting:
-
-<ul>
-<li>Uniqueness checking with presorting</li>
-<li>Mode finding with presorting</li>
-<li>Searching with presorting</li>
-</ul></li>
-<li>Binary Search Tree: <br>Each element in the left subtree is smaller than the root, and each element in the right sub-tree is larger than the root
-
-<ul>
-<li>BST which is &ldquo;reasonably&rdquo; balanced involves Theta(logn) comparisons in the worst case.</li>
-<li>BST which is not balanced involves linear search in the worst case.</li>
-<li>To insert a new element into a BST, search for k and insert the element at the empty sub-tree.</li>
-</ul></li>
-</ul>
-
-<h3 id="balanced-tree">- Balanced tree</h3>
-
-<ul>
-<li>AVL tree:
-
-<ul>
-<li>balance factor: the difference between the height of left subtree and right subtree.</li>
-<li>An AVL tree is a BST in which the balance factor is -1, 0 or 1 for every sub-tree.</li>
-<li>Insertion: transform the tree to regain balance after insertion by rotations.</li>
-<li>R-Rotation, L-Rotation, RL-Rotation, LR-Rotation.</li>
-<li>Always rebalance the lowest unbalanced subtree.</li>
-<li>Some more balanced tree:</li>
-<li>Red-black tree</li>
-<li>splay tree</li>
-</ul></li>
-<li>2-3 Trees and 2-3-4 Trees
-
-<ul>
-<li>A node that holds a single item has aat most two children.</li>
-<li>A node that holds two items has at most three children, and etc.</li>
-</ul></li>
-</ul>
-
-<p>To be contitued&hellip;</p>
-
-<h3 id="time-space-tradeoff">- Time space tradeoff</h3>
-
-<h3 id="hashing">- Hashing</h3>
-
-<h3 id="dynamic-programming">- Dynamic Programming</h3>
-
-<h3 id="warshall-and-floyd">- Warshall and Floyd</h3>
-
-<h3 id="greedy-algorithms">- Greedy Algorithms</h3>
-
-<h3 id="np-completeness">- NP Completeness</h3>
+<p>As everything else in the world, this approach is a double-edge sword. If done excessively, it becomes what is known as the <a href="http://callbackhell.com/">callback hell</a>, so use it wisely!</p>
 </div>
 
     <button onclick="topFunction()" id="topBtn" title="Go to top"><i class="fa fa-chevron-circle-up" style="font-size: 30px;"></i></button>

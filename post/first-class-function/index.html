@@ -11,7 +11,7 @@
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
         <meta name="msapplication-TileColor" content="#da532c">
         <meta name="theme-color" content="#ffffff">
-        <title>Algorithms</title>
+        <title>First-class functions</title>
         
         <style>
 
@@ -121,7 +121,7 @@
 
                 <div class="navbar-header">
 
-                    <a class="navbar-brand visible-xs" href="#">Algorithms</a>
+                    <a class="navbar-brand visible-xs" href="#">First-class functions</a>
 
                     <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
                         <span class="icon-bar"></span>
@@ -179,206 +179,67 @@
     
     
 
-    <h4><a href="/post/algorithms/">Algorithms</a></h4>
-    <h5>February 13, 2018</h5>
+    <h4><a href="/post/first-class-function/">First-class functions</a></h4>
+    <h5>July 13, 2018</h5>
     
 
 </div>
 
 
-    <br> <div class="text-justify">
+    <br> <div class="text-justify"><p>When I first started my <a href="https://github.com/zhitaop/nodejs-webapp/">nodejs webapp project</a>, I wrote all my routes in a single app.js file:</p>
 
-<p>This is one of a series of articles I plan to write about the subjects I learned in my Software Engineering degree, as a summary and rivision of all the knowledge I gained.</p>
+<pre><code>app.get('/some route', (req,res) =&gt; {
+    /*do something in the callback function*/
+});
 
-<p>Algorithms and data structures are perhaps the most basic yet most important subjects for all computer science students, that&rsquo;s why I started with this. First of all here&rsquo;s a <a href="https://visualgo.net/en">website</a> that I found quite useful to help learning algorithms and data structures by visualizing.</p>
+app.get('/some other route', (req,res) =&gt; {
+    /*do something in the callback function*/
+});
 
-<p>The outlines and summary of the algorithm and complexity subject:</p>
+app.post('/some other route', (req,res) =&gt; {
+    /*do something in the callback function*/
+});
 
-<h3 id="data-structure">- Data structure</h3>
+//and so on...
+</code></pre>
 
-<ul>
-<li>Array</li>
-<li>Linked list</li>
-<li>Stack (LIFO)</li>
-<li>Queue (FIFO)</li>
-<li>Priority queue</li>
-<li>Tree</li>
-<li>Graph</li>
-</ul>
+<p>Soon I realized that since the codes in every routes are pretty long, the app.js file itself became too long. It takes some time to locate the route I want and it&rsquo;s also difficult to maintain. So naturally what came into my mind is something I believe that every programmer has learned: modular design. I then tried to divide the routes into modules according to their funtionality: user controll, appointment controll, etc.</p>
 
-<h3 id="growth-rate-and-analysis">- Growth rate and Analysis</h3>
+<p>Before we dig into how I implemented the modules, let&rsquo;s talk about the title of this post: first class functions. According to <a href="https://en.wikipedia.org/wiki/First-class_function">wikipedia</a>: &ldquo;a programming language is said to have first-class functions when it supports passing functions as arguments to other functions, returning them as the values from other functions, and assigning them to variables or storing them in data structures&rdquo;. This was kind of a new concept to me when I ran into it, as it&rsquo;s not a common feature in the languages that I&rsquo;m most familiar with, i.e.Java and C.</p>
 
-<ul>
-<li><p>Time and space complexty</p>
+<p>But then I realized I&rsquo;ve been using it in every routes I wrote in Nodejs. In the above code, the anonymous callback function is a first-class function since it&rsquo;s passed into a get or post function as an argument. With this in mind, I implemented the modules as follows:</p>
 
-<p>t(n) ≈ c·g(n)
-where c is the cost of a basic operation and g is the number of times the operation is performed in terms of input size n.</p></li>
+<pre><code>//app.js
+//db is the database connection object defined earlier in the code
+app.post('/adduser', userController.addUser(db));
+app.post('/login', userController.login(db));
+app.get('user/:id', userController.getUserpage(db));
 
-<li><p>Best, worst and average case</p></li>
+//userController.js
+module.exports = {
+    addUser: (database) =&gt; {
+        return (req, res) =&gt; {
+            //do some query using the database object, and return the result to client in a response
+        }
+    }
+    login: (database) =&gt; {
+        return (req, res) =&gt; {
+            //do some other query
+        }
+    }
+    getUserpage: (database) =&gt; {
+        return (req, res) =&gt; {
+            //do some other query
+        }
+    }
+}
+</code></pre>
 
-<li><p>f (n) ≺ g(n) iff lim[n -&gt;infinity] f(n)/g(n) = 0</p></li>
+<p>The main idea is that, since the get or post function in the Expressjs framework expect a callback function with signature(req,res,next), we can&rsquo;t directly pass the database object into the callback. Instead, various helper functions are defined which takes the database object as an argument. They will return the callback funtion as a value, which has the expected signature and will do something with the database object and send a response back to the client. The helper functions are then exported in a module and passed into the corresponding routes. This design utilizes the first-class function feature of JavaScript to split the routes into different modules. A single database object can be shared by all the routes, so there&rsquo;s no need to create a separate database object in every module.</p>
 
-<li><p>1 ≺ log n ≺ n^e ≺ n^c ≺ n^(log n) ≺ c^n ≺ n^n<br />
-where 0 &lt; e &lt; 1 &lt; c</p></li>
+<p>But of course, I&rsquo;m not proficient in Javascript or Nodejs, so it&rsquo;s likely that the above is not the best approach and there are far better ways to do it. If you have any suggestion or want to discuss, feel free to comment to let me know!</p>
 
-<li><p>Big-O, Big-Omega and Big-Theta</p></li>
-
-<li><p>Complexity Analysis</p></li>
-</ul>
-
-<h3 id="brute-force">- Brute Force</h3>
-
-<ul>
-<li>Selection Sort</li>
-<li>String Matching</li>
-<li>Closest pair</li>
-<li>Exhaustive search for combinatorial problem</li>
-<li>Graph traversal</li>
-</ul>
-
-<h3 id="recursion">- Recursion</h3>
-
-<ul>
-<li>Example: Factorial Numbers and Fibonacci Numbers</li>
-<li>Example: Tower of Hanoi</li>
-<li>General guideline for recursion: recursively divide the problem into smaller sub-problems until base cases are reached.</li>
-<li>More efficient solution for recursion: dynamic programming</li>
-</ul>
-
-<h3 id="graph">- Graph</h3>
-
-<ul>
-<li>Graph concepts: Undirected - directed, Connnected - Not connected, Unweighted- weighted, Dense - Sparse, Cyclic - Acyclic(a tree), Directed cyclic - Directed acyclic(a dag)</li>
-<li>The degree of node v is the number of edges incident on v.</li>
-<li>Mathematical representation of graph:</li>
-</ul>
-
-<p><img src="/graphinmath.PNG" alt="graph" width="500" style="display: block; margin-left:auto; margin-right:auto;"/></p>
-
-<ul>
-<li>Graph representations : adjacency matrix and adjacency list</li>
-</ul>
-
-<h3 id="decrease-and-conquer-by-constant">- Decrease and Conquer by constant</h3>
-
-<ul>
-<li>The problem is reduced by some constant in each iteration of the algorithm</li>
-<li>To solve a problem of size n, try to express the solution in terms of a solution to the same problem of size n − 1.</li>
-<li>Insertion sort</li>
-<li>The trick of posting a sentinel for insertion sort</li>
-<li>Shellsort</li>
-</ul>
-
-<h3 id="decrease-and-conquer-by-factor">- Decrease and Conquer by factor</h3>
-
-<ul>
-<li>Decrease-by-a-constant-factor: Binary search</li>
-<li>Decrease-by-a-variable-factor: Interpolation search</li>
-<li>Lomuto Partitioning</li>
-</ul>
-
-<h3 id="divide-and-conquer">- Divide and Conquer</h3>
-
-<ul>
-<li>
-
-<ol>
-<li>Divide the given problem instance into smaller instances.</li>
-<li>Solve the smaller instances recursively.</li>
-<li>Combine the smaller solutions to solve the original instance.</li>
-</ol></li>
-<li>The Master Theorem</li>
-<li>Mergesort</li>
-<li>Quicksort and corresponding improvements:
-
-<ul>
-<li>Median-of-three</li>
-<li>Early Cut-off</li>
-</ul></li>
-</ul>
-
-<h3 id="binary-tree">Binary Tree</h3>
-
-<ul>
-<li>Binary tree traversal:
-
-<ul>
-<li>Preorder: root -&gt; left subtree -&gt; right subtree</li>
-<li>Inorder: left subtree -&gt; root -&gt; right subtree</li>
-<li>Postorder: left subtree -&gt; right subtree -&gt; root</li>
-<li>Level-order: visits the nodes level by level, starting from the root</li>
-</ul></li>
-<li>Closest Pair problem using divide-and-conquer to reach theta(nlogn) complexity</li>
-</ul>
-
-<h3 id="heap-and-heap-sort">- Heap and Heap sort</h3>
-
-<ul>
-<li>A Heap is a complete binary tree which satisfies the heap condition: <br>Each child has priority no greater than its parent&rsquo;s.(a max-heap)
-*</li>
-<li>Heapsort: Given unsorted array H[1..n]:
-
-<ol>
-<li>Turn H into a heap</li>
-<li>Apply the eject operation n-1 times</li>
-</ol></li>
-</ul>
-
-<h3 id="transform-and-conquer">- Transform and conquer</h3>
-
-<ul>
-<li>Try to make the problem easier through pre-processing, typical sorting:
-
-<ul>
-<li>Uniqueness checking with presorting</li>
-<li>Mode finding with presorting</li>
-<li>Searching with presorting</li>
-</ul></li>
-<li>Binary Search Tree: <br>Each element in the left subtree is smaller than the root, and each element in the right sub-tree is larger than the root
-
-<ul>
-<li>BST which is &ldquo;reasonably&rdquo; balanced involves Theta(logn) comparisons in the worst case.</li>
-<li>BST which is not balanced involves linear search in the worst case.</li>
-<li>To insert a new element into a BST, search for k and insert the element at the empty sub-tree.</li>
-</ul></li>
-</ul>
-
-<h3 id="balanced-tree">- Balanced tree</h3>
-
-<ul>
-<li>AVL tree:
-
-<ul>
-<li>balance factor: the difference between the height of left subtree and right subtree.</li>
-<li>An AVL tree is a BST in which the balance factor is -1, 0 or 1 for every sub-tree.</li>
-<li>Insertion: transform the tree to regain balance after insertion by rotations.</li>
-<li>R-Rotation, L-Rotation, RL-Rotation, LR-Rotation.</li>
-<li>Always rebalance the lowest unbalanced subtree.</li>
-<li>Some more balanced tree:</li>
-<li>Red-black tree</li>
-<li>splay tree</li>
-</ul></li>
-<li>2-3 Trees and 2-3-4 Trees
-
-<ul>
-<li>A node that holds a single item has aat most two children.</li>
-<li>A node that holds two items has at most three children, and etc.</li>
-</ul></li>
-</ul>
-
-<p>To be contitued&hellip;</p>
-
-<h3 id="time-space-tradeoff">- Time space tradeoff</h3>
-
-<h3 id="hashing">- Hashing</h3>
-
-<h3 id="dynamic-programming">- Dynamic Programming</h3>
-
-<h3 id="warshall-and-floyd">- Warshall and Floyd</h3>
-
-<h3 id="greedy-algorithms">- Greedy Algorithms</h3>
-
-<h3 id="np-completeness">- NP Completeness</h3>
+<p>Btw, there are actually first-class functions in C, and they are called function pointers!</p>
 </div>
 
     <button onclick="topFunction()" id="topBtn" title="Go to top"><i class="fa fa-chevron-circle-up" style="font-size: 30px;"></i></button>

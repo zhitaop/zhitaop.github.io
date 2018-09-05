@@ -6,40 +6,39 @@
     <description>Recent content in Posts on Zhitao Pan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 01 Aug 2018 23:11:51 +1000</lastBuildDate>
+    <lastBuildDate>Fri, 13 Jul 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://zhitaop.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>First-class functions</title>
+      <link>https://zhitaop.github.io/post/first-class-function/</link>
+      <pubDate>Fri, 13 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://zhitaop.github.io/post/first-class-function/</guid>
+      <description>When I first started my nodejs webapp project, I wrote all my routes in a single app.js file:
+app.get(&#39;/some route&#39;, (req,res) =&amp;gt; { /*do something in the callback function*/ }); app.get(&#39;/some other route&#39;, (req,res) =&amp;gt; { /*do something in the callback function*/ }); app.post(&#39;/some other route&#39;, (req,res) =&amp;gt; { /*do something in the callback function*/ }); //and so on...  Soon I realized that since the codes in every routes are pretty long, the app.</description>
+    </item>
+    
+    <item>
+      <title>The asynchronous nature of Javascript</title>
+      <link>https://zhitaop.github.io/post/javascript/</link>
+      <pubDate>Thu, 28 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://zhitaop.github.io/post/javascript/</guid>
+      <description>It all started when I first learned Node.js for back-end development. I started with some simple snippet like the following:
+var http = require(&#39;http&#39;); //create a server object: http.createServer(function (req, res) { res.write(&#39;Hello World!&#39;); //write a response to the client res.end(); //end the response }).listen(8080); //the server object listens on port 8080  This looks simple enough albeit the seemingly slightly odd syntax, all it does is creating a HTTP server that listens to a server port and gives a response when it receives a request.</description>
+    </item>
+    
+    <item>
       <title>Algorithms</title>
       <link>https://zhitaop.github.io/post/algorithms/</link>
-      <pubDate>Wed, 01 Aug 2018 23:11:51 +1000</pubDate>
+      <pubDate>Tue, 13 Feb 2018 23:11:51 +1000</pubDate>
       
       <guid>https://zhitaop.github.io/post/algorithms/</guid>
-      <description>https://visualgo.net/en - Data structure  Array Linked list Stack (LIFO) Queue (FIFO) Priority queue Tree Graph  - Growth rate and Analysis  Time and space complexty
-t(n) ≈ c·g(n) where c is the cost of a basic operation and g is the number of times the operation is performed in terms of input size n.
- Best, worst and average case
- f (n) ≺ g(n) iff lim[n -&amp;gt;infinity] f(n)/g(n) = 0</description>
-    </item>
-    
-    <item>
-      <title>Internet technologies</title>
-      <link>https://zhitaop.github.io/post/network/</link>
-      <pubDate>Thu, 28 Sep 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://zhitaop.github.io/post/network/</guid>
-      <description> - Physical Layer - Data Link Layer - MAC Sub Layer - Network Layer - Transport Layer - Application Layer - Http - Security - Multimedia </description>
-    </item>
-    
-    <item>
-      <title>(Hu)go Template Primer</title>
-      <link>https://zhitaop.github.io/post/goisforlovers/</link>
-      <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://zhitaop.github.io/post/goisforlovers/</guid>
-      <description>Hugo uses the excellent go html/template library for its template engine. It is an extremely lightweight engine that provides a very small amount of logic. In our experience that it is just the right amount of logic to be able to create a good static website. If you have used other template systems from different languages or frameworks you will find a lot of similarities in go templates.
-This document is a brief primer on using go templates.</description>
+      <description>This is one of a series of articles I plan to write about the subjects I learned in my Software Engineering degree, as a summary and rivision of all the knowledge I gained.
+Algorithms and data structures are perhaps the most basic yet most important subjects for all computer science students, that&amp;rsquo;s why I started with this. First of all here&amp;rsquo;s a website that I found quite useful to help learning algorithms and data structures by visualizing.</description>
     </item>
     
   </channel>
