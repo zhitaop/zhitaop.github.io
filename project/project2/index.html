@@ -11,7 +11,7 @@
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
         <meta name="msapplication-TileColor" content="#da532c">
         <meta name="theme-color" content="#ffffff">
-        <title>Project 2</title>
+        <title>Multi-server broadcast system</title>
         
         <style>
 
@@ -121,7 +121,7 @@
 
                 <div class="navbar-header">
 
-                    <a class="navbar-brand visible-xs" href="#">Project 2</a>
+                    <a class="navbar-brand visible-xs" href="#">Multi-server broadcast system</a>
 
                     <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
                         <span class="icon-bar"></span>
@@ -156,7 +156,7 @@
                             
                                 <li class="navbar-icon"><a href="https://github.com/zhitaop"><i class="fa fa-github"></i></a></li>
                             
-                                <li class="navbar-icon"><a href="https://www.linkedin.com/in/zhitao-pan-97a043145/"><i class="fa fa-linkedin"></i></a></li>
+                                <li class="navbar-icon"><a href="https://www.linkedin.com/in/zhitao-pan/"><i class="fa fa-linkedin"></i></a></li>
                             
                         </ul>
                     
@@ -174,30 +174,74 @@
 
     
     
-        
-        
-            
-        
-    
     
 
     
       
 
-    <h4><a href="https://github.com/zhitaop/#/">Project 2</a></h4>
-    <h5>Consectetur adipiscing elit</h5>
+    <h4><a href="/project/project2/">Multi-server broadcast system</a></h4>
+    <h5>Multi-server system for broadcasting messages between clients</h5>
     
-    <a href="https://zhitaop.github.io/tags/html"><kbd class="item-tag">html</kbd></a>
-    
-    <a href="https://zhitaop.github.io/tags/css"><kbd class="item-tag">css</kbd></a>
-    
-    <a href="https://zhitaop.github.io/tags/js"><kbd class="item-tag">js</kbd></a>
+    <a href="https://zhitaop.github.io/tags/java"><kbd class="item-tag">java</kbd></a>
     
 
 </div>
 
 
-    <br> <div class="text-justify"></div>
+    <br> <div class="text-justify">
+
+<p>This is a multi-server system for broadcasting messages between clients inplemented in Java. The codes and basic introduction of the project can be found on my github repo <a href="https://github.com/zhitaop/Multi-server-broadcast-system">here</a>.</p>
+
+<p>The message broadcasting is done by common implementation of the Socket/ServerSocket class and JSON object handling in Java, nothing too fancy. The code quality and structure can probably be improved quite a bit, like applying more software design pattern and making it more object-oriented, but that&rsquo;s not the focus of this post.</p>
+
+<p>The part I found interesting is to about maintaining high availability in a distributed system. According to the <a href="https://en.wikipedia.org/wiki/CAP_theorem">CAP theorem</a>, a distributed system has to choose between availability and consistency in the presence of a network partition, as it&rsquo;s impossible to guarantee both. We are required to focus on availability, i.e. to ensure servers can communicate with each other as soon as possible in the event of network partitioning.</p>
+
+<h3 id="architecture-of-the-system">Architecture of the system.</h3>
+
+<p>The system is implemented over the TCP protocol, meaning that it&rsquo;s connection-oriented. Each server can receive multiple incoming connections from other servers or clients, but it can only make one outgoing connection to another server. In other words, the servers form a tree structure. Between any two nodes, there should always be only one connection, as more will result in abnormal behaviour of the broadcast protocol.</p>
+
+<p>To achieve availability under network partition, I implemented a mechanism for servers to make outgoing connection to another server in the system, when the server it was originally connected to crashes.</p>
+
+<h3 id="the-backup-algorithm">The backup algorithm</h3>
+
+<p>In order to discuss the details of the algorithm, let&rsquo;s call the servers that is making the outgoing connection children, and the servers that is receiving incoming connection parents, similar to a tree structure. We further define a backup server for each server, which is always the parent of its parent. The servers will follow the rules below:</p>
+
+<ul>
+<li>When a server detects that its parent crashes, it will try to connect to its backup server, and set that as its new parent.</li>
+<li>After a server connects to a new parent successfully, it will set up a new backup server, which is the parent of its new parent.</li>
+<li>Following the above, a server will broadcast a message to all of its children to inform them that its parent has changed.</li>
+<li>When a server receives a message that its parent&rsquo;s parent has changed, it will change its backup server accordingly.</li>
+<li>A server would do nothing if any of its children crashes.</li>
+</ul>
+
+<p>The idea is simple: to ensure that when a server&rsquo;s parent crashes it will connect to its backup server, so that all the remaining servers in the system would form a single tree. However, what about the root of the tree which doesn&rsquo;t have a parent? To solve this, we need a few extra special rules:</p>
+
+<ul>
+<li>The first two servers (the root and its first child) in a system will not have a backup server, i.e. their backup server is null, and they will set each other as their own parent.</li>
+<li>When a server without a backup detects that its parent crashes, it will choose one of its existing connected server as its parent.</li>
+<li>When a server A receives a message from its parent B, that B chooses A as its new parent, A will set its backup server to null. In other words, there will always be two servers without backup server in the system.</li>
+</ul>
+
+<p>These might seem a bit complicated at a first glance, so an example with diagram would be helpful. In the following diagram, the arrows indicate a parent-child relationship, and the parent and backup server of each node is shown beside each node.</p>
+
+<p><br>
+<img src="/serverDemo1.png" alt="server state graph 1" width="300"/>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <img src="/serverDemo2.png" alt="server state graph 2" width="300"/></p>
+
+<p>a. The initial state of the system  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+b. The system after server A crashed</p>
+
+<p><br>
+<img src="/serverDemo3.png" alt="server state graph 3" width="200"/></p>
+
+<p>c. The system after server B crashed (D,E,F fisrt connect to C, then C chooses F as its new parent)</p>
+
+<p>Hopefully, we can see from the above example how the system works. This mechanism ensures that a single tree structure is always maintained in the system, and there will be only one connection between any two nodes. Therefore, availability is achieved(to some extent) under netwrok partitioning.</p>
+
+<h3 id="flaws">Flaws</h3>
+
+<p>This mechanism assumes that only one server would crash at a time. Imagine the scenario where a server&rsquo;s parent and backup both crashes at the same time, before the server can connect to the backup. Then the server would try to connect to a server(its backup) that&rsquo;s no longer available, which would of course fail. Although this simultaneous crash is unlikely to happen, it&rsquo;s still a flaw in the system.</p>
+</div>
 
     <button onclick="topFunction()" id="topBtn" title="Go to top"><i class="fa fa-chevron-circle-up" style="font-size: 30px;"></i></button>
     <button onclick="botFunction()" id="botBtn" title="Go to top"><i class="fa fa-chevron-circle-down" style="font-size: 30px;"></i></button>

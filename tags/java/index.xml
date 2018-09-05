@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Java on Zhitao Pan</title>
+    <link>https://zhitaop.github.io/tags/java/</link>
+    <description>Recent content in Java on Zhitao Pan</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    
+	<atom:link href="https://zhitaop.github.io/tags/java/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Multi-server broadcast system</title>
+      <link>https://zhitaop.github.io/project/project2/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zhitaop.github.io/project/project2/</guid>
+      <description>This is a multi-server system for broadcasting messages between clients inplemented in Java. The codes and basic introduction of the project can be found on my github repo here.
+The message broadcasting is done by common implementation of the Socket/ServerSocket class and JSON object handling in Java, nothing too fancy. The code quality and structure can probably be improved quite a bit, like applying more software design pattern and making it more object-oriented, but that&amp;rsquo;s not the focus of this post.</description>
+    </item>
+    
+  </channel>
+</rss>
