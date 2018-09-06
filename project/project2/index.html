@@ -190,11 +190,11 @@
 
     <br> <div class="text-justify">
 
-<p>This is a multi-server system for broadcasting messages between clients inplemented in Java. The codes and basic introduction of the project can be found on my github repo <a href="https://github.com/zhitaop/Multi-server-broadcast-system">here</a>.</p>
+<p>This is a multi-server system for broadcasting messages between clients inplemented in Java. The codes and basic introduction of the project can be found on my github repo <a href="https://github.com/zhitaop/Multi-server-broadcast-system" target="_blank">here</a>.</p>
 
 <p>The message broadcasting is done by common implementation of the Socket/ServerSocket class and JSON object handling in Java, nothing too fancy. The code quality and structure can probably be improved quite a bit, like applying more software design pattern and making it more object-oriented, but that&rsquo;s not the focus of this post.</p>
 
-<p>The part I found interesting is to about maintaining high availability in a distributed system. According to the <a href="https://en.wikipedia.org/wiki/CAP_theorem">CAP theorem</a>, a distributed system has to choose between availability and consistency in the presence of a network partition, as it&rsquo;s impossible to guarantee both. We are required to focus on availability, i.e. to ensure servers can communicate with each other as soon as possible in the event of network partitioning.</p>
+<p>The part I found interesting is to about maintaining high availability in a distributed system. According to the <a href="https://en.wikipedia.org/wiki/CAP_theorem" target="_blank">CAP theorem</a>, a distributed system has to choose between availability and consistency in the presence of a network partition, as it&rsquo;s impossible to guarantee both. We are required to focus on availability, i.e. to ensure servers can communicate with each other as soon as possible in the event of network partitioning.</p>
 
 <h3 id="architecture-of-the-system">Architecture of the system.</h3>
 

@@ -186,7 +186,7 @@
 </div>
 
 
-    <br> <div class="text-justify"><p>When I first started my <a href="https://github.com/zhitaop/nodejs-webapp/">nodejs webapp project</a>, I wrote all my routes in a single app.js file:</p>
+    <br> <div class="text-justify"><p>When I first started my <a href="https://github.com/zhitaop/nodejs-webapp/" target="_blank">nodejs webapp project</a>, I wrote all my routes in a single app.js file:</p>
 
 <pre><code>app.get('/some route', (req,res) =&gt; {
     /*do something in the callback function*/
@@ -205,7 +205,7 @@ app.post('/some other route', (req,res) =&gt; {
 
 <p>Soon I realized that since the codes in every routes are pretty long, the app.js file itself became too long. It takes some time to locate the route I want and it&rsquo;s also difficult to maintain. So naturally what came into my mind is something I believe that every programmer has learned: modular design. I then tried to divide the routes into modules according to their funtionality: user controll, appointment controll, etc.</p>
 
-<p>Before we dig into how I implemented the modules, let&rsquo;s talk about the title of this post: first class functions. According to <a href="https://en.wikipedia.org/wiki/First-class_function">wikipedia</a>: &ldquo;a programming language is said to have first-class functions when it supports passing functions as arguments to other functions, returning them as the values from other functions, and assigning them to variables or storing them in data structures&rdquo;. This was kind of a new concept to me when I ran into it, as it&rsquo;s not a common feature in the languages that I&rsquo;m most familiar with, i.e.Java and C.</p>
+<p>Before we dig into how I implemented the modules, let&rsquo;s talk about the title of this post: first class functions. According to <a href="https://en.wikipedia.org/wiki/First-class_function" target="_blank">wikipedia</a>: &ldquo;a programming language is said to have first-class functions when it supports passing functions as arguments to other functions, returning them as the values from other functions, and assigning them to variables or storing them in data structures&rdquo;. This was kind of a new concept to me when I ran into it, as it&rsquo;s not a common feature in the languages that I&rsquo;m most familiar with, i.e.Java and C.</p>
 
 <p>But then I realized I&rsquo;ve been using it in every routes I wrote in Nodejs. In the above code, the anonymous callback function is a first-class function since it&rsquo;s passed into a get or post function as an argument. With this in mind, I implemented the modules as follows:</p>
 

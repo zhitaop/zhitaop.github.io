@@ -199,13 +199,11 @@ res.end(); //end the response
 }).listen(8080); //the server object listens on port 8080
 </code></pre>
 
-<p>This looks simple enough albeit the seemingly slightly odd syntax, all it does is creating a HTTP server that listens to a server port and gives a response when it receives a request. However, this odd syntax is what this post is about: asynchronous function. Actually there&rsquo;s more to it, but I write about that in another <a href="../first-class-function">post</a></p>
-
-<p>I thought of this as a normal syntax of Node.js. It was only after I dived into Node.js deeper for backend development that I realized there are more to it. And that&rsquo;s the topic of this post: the asynchronous nature and first-class function support of Javascript.</p>
+<p>This looks simple enough albeit the seemingly slightly odd syntax, all it does is creating a HTTP server that listens to a server port and gives a response when it receives a request. However, this odd syntax has something to do with the topic today: asynchronous function. Actually there&rsquo;s more to it, but I write about that in another <a href="../first-class-function">post</a>.</p>
 
 <h3 id="synchronous-and-asynchronous-functions">Synchronous and Asynchronous functions</h3>
 
-<p>What do these two terms mean and what&rsquo;s the difference between them? I found some excellent answers for this on Stack Overflow <a href="https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call">here</a> and <a href="https://stackoverflow.com/questions/23667086/why-is-my-variable-unaltered-after-i-modify-it-inside-of-a-function-asynchron">here</a>, they are both good reads if you are interested in more details. But TLDR, synchronous function is when all of the code executes in sequential order, i.e. after a function is called, any code after the call has to wait for the function to return a result before they can continue to execute. On the other hand, in asynchronous function, code after a function executes immediately after that function is called, even when a result is not returned yet.</p>
+<p>What do these two terms mean and what&rsquo;s the difference between them? I found some excellent answers for this on Stack Overflow <a href="https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call" target="_blank">here</a> and <a href="https://stackoverflow.com/questions/23667086/why-is-my-variable-unaltered-after-i-modify-it-inside-of-a-function-asynchron" target="_blank">here</a>, they are both good reads if you are interested in more details. But TLDR, synchronous function is when all of the code executes in sequential order, i.e. after a function is called, any code after the call has to wait for the function to return a result before they can continue to execute. On the other hand, in asynchronous function, code after a function executes immediately after that function is called, even when a result is not returned yet.</p>
 
 <p>You might be wondering: What if I want to do something with the result? Where should I put such code? That&rsquo;s when a <em>callback</em> function comes in handy. You would see this term a lot if you are dealing with node.js. A callback function only executes when the function that calls it returns a result. Let&rsquo;s see the below example:</p>
 
@@ -279,7 +277,7 @@ app.get('/someroute',(req, res)=&gt;{
 
 <p>In the above code, the three callback functions are nested. The second query function will only execute when the callback function in the first query returns a result, the third query will only execute when the second query returns a result. Finally, when the third query returns a result, all the results can be returned to the client in one response.</p>
 
-<p>As everything else in the world, this approach is a double-edge sword. If done excessively, it becomes what is known as the <a href="http://callbackhell.com/">callback hell</a>, so use it wisely!</p>
+<p>As everything else in the world, this approach is a double-edge sword. If done excessively, it becomes what is known as the <a href="http://callbackhell.com/" target="_blank">callback hell</a>, so use it wisely!</p>
 </div>
 
     <button onclick="topFunction()" id="topBtn" title="Go to top"><i class="fa fa-chevron-circle-up" style="font-size: 30px;"></i></button>
